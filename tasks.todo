@@ -2,8 +2,23 @@
 [ ] Dummy JSON for Products
 [ ] FrontEnd
     [ ] Handle Auth
-    [ ] Create Header and Cart-Icon
-    [ ] Create Dummy Products Page
+        [x] Login Modal
+        [x] Login form
+        [x] Signup form
+    [x] Create Header and Cart-Icon
+    [x] Create Dummy Products Page
+        [x] Create Product List
+        [x] Create Single Product Page
+    [ ] Dashboard Page
+        [ ] Role Admin 
+            [ ] Create Product
+            [ ] Create Discount
+            [ ] All Product List
+            [ ] All Discount List
+        [ ] Role User
+            [ ] Name 
+            [ ] Order History
+            [ ] Address
     [ ] Create Cart Page
     [ ] Checkout Page
         [ ] Discount Apply

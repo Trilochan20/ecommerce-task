@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import CartIcon from "./CartIcon";
+import LoginModal from "./Auth/LoginModal";
 
 interface NavItem {
   label: string;
@@ -18,6 +19,10 @@ const navItems: NavItem[] = [
 
 export const NavigationHeader: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const openLoginModal = () => setIsLoginModalOpen(true);
+  const closeLoginModal = () => setIsLoginModalOpen(false);
 
   return (
     <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
@@ -54,15 +59,15 @@ export const NavigationHeader: React.FC = () => {
           {/* Cart and Login */}
           <div className="flex items-center space-x-8">
             <CartIcon />
-            <a
-              href="/"
+            <button
+              onClick={openLoginModal}
               className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white 
               transition duration-200 rounded shadow-md bg-emerald-400 hover:bg-emerald-700 focus:shadow-outline focus:outline-none"
               aria-label="Login"
               title="Login"
             >
               LOGIN
-            </a>
+            </button>
           </div>
         </div>
 
@@ -119,16 +124,16 @@ export const NavigationHeader: React.FC = () => {
                       </li>
                     ))}
                     <li>
-                      <a
-                        href="/"
+                      <button
+                        onClick={openLoginModal}
                         className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide
                          text-slate-900 transition duration-200 rounded shadow-md 
                          bg-emerald-400 hover:bg-emerald-700 focus:shadow-outline focus:outline-none"
-                        aria-label="Sign up"
-                        title="Sign up"
+                        aria-label="Sign in"
+                        title="Sign in"
                       >
-                        Sign up
-                      </a>
+                        Sign in
+                      </button>
                     </li>
                   </ul>
                 </nav>
@@ -136,6 +141,9 @@ export const NavigationHeader: React.FC = () => {
             </div>
           )}
         </div>
+
+        {/* Login Modal */}
+        <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
       </div>
     </div>
   );

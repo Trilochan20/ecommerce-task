@@ -5,15 +5,93 @@
       "name": "New Product 2",
       "quantity": 43,
       "price": 14.99,
-      "image": "https://loremflickr.com/320/240/apple"
+      "image": "https://picsum.photos/1920/1080?apple"
     },
     {
       "productId": "ejhgie",
       "name": "New Product 3",
       "quantity": 50,
       "price": 12.99,
-      "image": "https://loremflickr.com/320/240/banana"
+      "image": "https://picsum.photos/1920/1080?banana"
+    },
+    {
+      "productId": "oioih",
+      "name": "New Product 4",
+      "quantity": 20,
+      "price": 16.99,
+      "image": "https://picsum.photos/1920/1080?oranges"
+    },
+    {
+      "productId": "pqrst",
+      "name": "New Product 5",
+      "quantity": 35,
+      "price": 19.99,
+      "image": "https://picsum.photos/1920/1080?grapes"
+    },
+    {
+      "productId": "uvwxy",
+      "name": "New Product 6",
+      "quantity": 28,
+      "price": 9.99,
+      "image": "https://picsum.photos/1920/1080?mango"
+    },
+    {
+      "productId": "zabcd",
+      "name": "New Product 7",
+      "quantity": 60,
+      "price": 24.99,
+      "image": "https://picsum.photos/1920/1080?pineapple"
+    },
+    {
+      "productId": "efghi",
+      "name": "New Product 8",
+      "quantity": 15,
+      "price": 34.99,
+      "image": "https://picsum.photos/1920/1080?kiwi"
+    },
+    {
+      "productId": "jklmn",
+      "name": "New Product 9",
+      "quantity": 55,
+      "price": 7.99,
+      "image": "https://picsum.photos/1920/1080?strawberry"
+    },
+    {
+      "productId": "opqrs",
+      "name": "New Product 10",
+      "quantity": 40,
+      "price": 29.99,
+      "image": "https://picsum.photos/1920/1080?watermelon"
+    },
+    {
+      "productId": "tuvwx",
+      "name": "New Product 11",
+      "quantity": 25,
+      "price": 39.99,
+      "image": "https://picsum.photos/1920/1080?peach"
+    },
+    {
+      "productId": "yzabc",
+      "name": "New Product 12",
+      "quantity": 30,
+      "price": 17.99,
+      "image": "https://picsum.photos/1920/1080?cherry"
+    },
+    {
+      "productId": "defgh",
+      "name": "New Product 13",
+      "quantity": 45,
+      "price": 22.99,
+      "image": "https://picsum.photos/1920/1080?blueberry"
     }
   ],
-  "users": []
+  "users": [
+    {
+      "userId": "QR8kVvmO_A5fBNj1h2M8i",
+      "username": "admin",
+      "password": "admin",
+      "email": "admin@admin.com",
+      "role": "admin"
+    }
+  ]
 }
