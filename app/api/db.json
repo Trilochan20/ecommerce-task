@@ -5,14 +5,14 @@
       "name": "New Product 2",
       "quantity": 43,
       "price": 14.99,
-      "image": "https://ohoiho.com/image.jpg"
+      "image": "https://loremflickr.com/320/240/apple"
     },
     {
       "productId": "ejhgie",
       "name": "New Product 3",
       "quantity": 50,
       "price": 12.99,
-      "image": "https://aekugh.com/image.jpg"
+      "image": "https://loremflickr.com/320/240/banana"
     }
   ],
   "users": []
