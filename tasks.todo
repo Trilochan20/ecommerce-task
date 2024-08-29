@@ -26,8 +26,9 @@
     [x] install lowdb
     [x] Create CRUD apis
     [ ] Create auth apis    
-        [ ] create user
-            [ ] login
-            [ ] logout
+        [ ] create user (signup)
+        [ ] get all users
+        [ ] login
+        [ ] logout
         [ ] create order history under user
     [ ] Create discount api

@@ -88,10 +88,25 @@
   "users": [
     {
       "userId": "QR8kVvmO_A5fBNj1h2M8i",
-      "username": "admin",
       "password": "admin",
       "email": "admin@admin.com",
       "role": "admin"
+    },
+    {
+      "name": "User Name",
+      "email": "user@examplenew.com",
+      "password": "userpassword",
+      "userId": "348dd77c-09bc-4ab3-b0d9-e31c57c7aee9",
+      "role": "user",
+      "orders": []
+    },
+    {
+      "name": "New User 4",
+      "email": "user@lalala.com",
+      "password": "kjbkjb",
+      "userId": "4b59f97e-67b9-4439-87af-5188b9968271",
+      "role": "user",
+      "orders": []
     }
   ]
 }
