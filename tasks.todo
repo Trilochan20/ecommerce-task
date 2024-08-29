@@ -7,4 +7,12 @@
     [ ] Create Cart Page
     [ ] Checkout Page
         [ ] Discount Apply
-[]
+[ ] Backend
+    [x] install lowdb
+    [x] Create CRUD apis
+    [ ] Create auth apis    
+        [ ] create user
+            [ ] login
+            [ ] logout
+        [ ] create order history under user
+    [ ] Create discount api

@@ -1,0 +1,19 @@
+{
+  "products": [
+    {
+      "productId": "aoiehgoieho",
+      "name": "New Product 2",
+      "quantity": 43,
+      "price": 14.99,
+      "image": "https://ohoiho.com/image.jpg"
+    },
+    {
+      "productId": "ejhgie",
+      "name": "New Product 3",
+      "quantity": 50,
+      "price": 12.99,
+      "image": "https://aekugh.com/image.jpg"
+    }
+  ],
+  "users": []
+}
