@@ -68,7 +68,9 @@ export const NavigationHeader: React.FC = () => {
             <CartIcon />
             {user ? (
               <>
-                <span>Welcome, {user.name}</span>
+                <a href="/dashboard" className="hover:text-emerald-400">
+                  Welcome, {user.name}
+                </a>
                 <button
                   onClick={handleLogout}
                   className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white 
@@ -105,7 +107,7 @@ export const NavigationHeader: React.FC = () => {
             <FaBars className="w-5 h-5 text-gray-600" />
           </button>
           {isMenuOpen && (
-            <div className="absolute top-0 left-0 w-full">
+            <div className="absolute top-0 left-0 w-full z-10">
               <div className="p-5 bg-white border rounded shadow-sm">
                 <div className="flex items-center justify-between mb-4">
                   <div>
@@ -134,23 +136,35 @@ export const NavigationHeader: React.FC = () => {
                 <nav>
                   <ul className="space-y-4">
                     {navItems.map((item) => (
-                      <li key={item.label}>
+                      <li key={item.label} className="p-2">
                         <a
                           href={item.href}
                           aria-label={item.label}
                           title={item.label}
                           className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-emerald-400"
+                          onClick={() => setIsMenuOpen(false)}
                         >
                           {item.label}
                         </a>
                       </li>
                     ))}
-                    <li>
+                    <li className="p-2">
                       {user ? (
                         <>
-                          <span>Welcome, {user.name}</span>
+                          <a
+                            href="/dashboard"
+                            className="inline-flex items-center justify-center w-full h-12 px-6 mb-2 font-medium tracking-wide
+                           text-slate-900 transition duration-200 rounded shadow-md 
+                           bg-emerald-400 hover:bg-emerald-700 focus:shadow-outline focus:outline-none"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            Welcome, {user.name}
+                          </a>
                           <button
-                            onClick={handleLogout}
+                            onClick={() => {
+                              handleLogout();
+                              setIsMenuOpen(false);
+                            }}
                             className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide
                              text-slate-900 transition duration-200 rounded shadow-md 
                              bg-emerald-400 hover:bg-emerald-700 focus:shadow-outline focus:outline-none"
@@ -162,7 +176,10 @@ export const NavigationHeader: React.FC = () => {
                         </>
                       ) : (
                         <button
-                          onClick={openLoginModal}
+                          onClick={() => {
+                            openLoginModal();
+                            setIsMenuOpen(false);
+                          }}
                           className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide
                            text-slate-900 transition duration-200 rounded shadow-md 
                            bg-emerald-400 hover:bg-emerald-700 focus:shadow-outline focus:outline-none"
