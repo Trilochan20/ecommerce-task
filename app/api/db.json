@@ -87,6 +87,7 @@
   ],
   "users": [
     {
+      "name": "Admin",
       "userId": "QR8kVvmO_A5fBNj1h2M8i",
       "password": "admin",
       "email": "admin@admin.com",
@@ -106,6 +107,22 @@
       "password": "kjbkjb",
       "userId": "4b59f97e-67b9-4439-87af-5188b9968271",
       "role": "user",
+      "orders": []
+    },
+    {
+      "name": "New user 5",
+      "email": "user@kadali.com",
+      "role": "user",
+      "userId": "191f1765-f8f8-4410-a508-b31e208cb6d8",
+      "password": "kjbkjb",
+      "orders": []
+    },
+    {
+      "name": "Abc",
+      "email": "abc@xyz.com",
+      "role": "user",
+      "userId": "c039c9bd-ff30-42cf-9367-98f37342c657",
+      "password": "123456",
       "orders": []
     }
   ]

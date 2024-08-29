@@ -5,6 +5,7 @@
         [x] Login Modal
         [x] Login form
         [x] Signup form
+        [x] Add validation
     [x] Create Header and Cart-Icon
     [x] Create Dummy Products Page
         [x] Create Product List
@@ -26,9 +27,9 @@
     [x] install lowdb
     [x] Create CRUD apis
     [ ] Create auth apis    
-        [ ] create user (signup)
-        [ ] get all users
-        [ ] login
+        [x] create user (signup)
+        [x] get all users
+        [x] login
         [ ] logout
         [ ] create order history under user
     [ ] Create discount api

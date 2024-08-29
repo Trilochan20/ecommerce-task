@@ -88,79 +88,67 @@ export async function POST(request: Request) {
   const { searchParams } = new URL(request.url)
   const action = searchParams.get('action')
 
-  if (action === 'createUser') {
-    await db.read()
-
+  if (action === 'login') {
     const body = await request.json()
-    const { name, email, password } = body // Add password here
+    const { email, password } = body
 
-    // Check if user already exists
-    const userExists = db.data.users.some(user => user.email === email)
-    if (userExists) {
+    const { user, error } = await loginUser(email, password)
+
+    if (user) {
+      const { password: _, ...userWithoutPassword } = user
       return new Response(JSON.stringify({
-        message: 'User already exists'
+        message: 'Login successful',
+        user: userWithoutPassword
       }), {
         headers: { 'Content-Type': 'application/json' },
-        status: 409
+        status: 200
+      })
+    } else {
+      return new Response(JSON.stringify({
+        message: error
+      }), {
+        headers: { 'Content-Type': 'application/json' },
+        status: 401
+      })
+    }
+  } else if (action === 'createUser') {
+    return await createUser(request)
+  } else {
+    // Existing product creation logic
+    const body = await request.json()
+    const newProduct: Product = {
+      productId: body.productId,
+      name: body.name,
+      quantity: body.quantity,
+      price: body.price,
+      image: body.image
+    }
+
+    const validationError = validateProduct(newProduct);
+    if (validationError) {
+      return new Response(JSON.stringify({
+          message: validationError
+      }), {
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          status: 400
       })
     }
 
-    // Create new user
-    const newUser: User = {
-      name,
-      email,
-      password, // Add password here
-      userId: randomUUID(),
-      role: 'user', // Always set role to 'user'
-      orders: []
-    }
-
-    db.data.users.push(newUser)
+    db.data.products.push(newProduct)
     await db.write()
 
     return new Response(JSON.stringify({
-      message: 'User created successfully',
-      user: { ...newUser, password: undefined } // Exclude password from response
+      message: 'Product created successfully',
+      product: newProduct
     }), {
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       status: 201
     })
   }
-
-  // Existing product creation logic
-  const body = await request.json()
-  const newProduct: Product = {
-    productId: body.productId,
-    name: body.name,
-    quantity: body.quantity,
-    price: body.price,
-    image: body.image
-  }
-
-  const validationError = validateProduct(newProduct);
-  if (validationError) {
-    return new Response(JSON.stringify({
-        message: validationError
-    }), {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        status: 400
-    })
-  }
-
-  db.data.products.push(newProduct)
-  await db.write()
-
-  return new Response(JSON.stringify({
-    message: 'Product created successfully',
-    product: newProduct
-  }), {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    status: 201
-  })
 }
 
 
@@ -339,5 +327,21 @@ export async function createUser(request: Request) {
 async function getAllNonAdminUsers(): Promise<Omit<User, 'password'>[]> {
   await db.read()
   return db.data.users.filter(user => user.role !== 'admin').map(({ password, ...user }) => user);
+}
+
+// Add this new function for user login
+async function loginUser(email: string, password: string): Promise<{ user: User | null; error: string | null }> {
+  await db.read()
+  const user = db.data.users.find(u => u.email === email)
+  
+  if (!user) {
+    return { user: null, error: "User doesn't exist. Please sign up." }
+  }
+  
+  if (user.password !== password) {
+    return { user: null, error: "Password is incorrect." }
+  }
+  
+  return { user, error: null }
 }
 

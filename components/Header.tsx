@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import CartIcon from "./CartIcon";
 import LoginModal from "./Auth/LoginModal";
+import { useUser } from "./Context/UserContext";
 
 interface NavItem {
   label: string;
@@ -20,9 +21,15 @@ const navItems: NavItem[] = [
 export const NavigationHeader: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const { user, logout } = useUser();
 
   const openLoginModal = () => setIsLoginModalOpen(true);
   const closeLoginModal = () => setIsLoginModalOpen(false);
+
+  const handleLogout = () => {
+    logout();
+    // You might want to redirect the user or update the UI after logout
+  };
 
   return (
     <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
@@ -56,18 +63,33 @@ export const NavigationHeader: React.FC = () => {
             ))}
           </ul>
 
-          {/* Cart and Login */}
+          {/* Cart and Login/Logout */}
           <div className="flex items-center space-x-8">
             <CartIcon />
-            <button
-              onClick={openLoginModal}
-              className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white 
-              transition duration-200 rounded shadow-md bg-emerald-400 hover:bg-emerald-700 focus:shadow-outline focus:outline-none"
-              aria-label="Login"
-              title="Login"
-            >
-              LOGIN
-            </button>
+            {user ? (
+              <>
+                <span>Welcome, {user.name}</span>
+                <button
+                  onClick={handleLogout}
+                  className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white 
+                  transition duration-200 rounded shadow-md bg-emerald-400 hover:bg-emerald-700 focus:shadow-outline focus:outline-none"
+                  aria-label="Logout"
+                  title="Logout"
+                >
+                  LOGOUT
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={openLoginModal}
+                className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white 
+                transition duration-200 rounded shadow-md bg-emerald-400 hover:bg-emerald-700 focus:shadow-outline focus:outline-none"
+                aria-label="Login"
+                title="Login"
+              >
+                LOGIN
+              </button>
+            )}
           </div>
         </div>
 
@@ -124,16 +146,32 @@ export const NavigationHeader: React.FC = () => {
                       </li>
                     ))}
                     <li>
-                      <button
-                        onClick={openLoginModal}
-                        className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide
-                         text-slate-900 transition duration-200 rounded shadow-md 
-                         bg-emerald-400 hover:bg-emerald-700 focus:shadow-outline focus:outline-none"
-                        aria-label="Sign in"
-                        title="Sign in"
-                      >
-                        Sign in
-                      </button>
+                      {user ? (
+                        <>
+                          <span>Welcome, {user.name}</span>
+                          <button
+                            onClick={handleLogout}
+                            className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide
+                             text-slate-900 transition duration-200 rounded shadow-md 
+                             bg-emerald-400 hover:bg-emerald-700 focus:shadow-outline focus:outline-none"
+                            aria-label="Logout"
+                            title="Logout"
+                          >
+                            Logout
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          onClick={openLoginModal}
+                          className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide
+                           text-slate-900 transition duration-200 rounded shadow-md 
+                           bg-emerald-400 hover:bg-emerald-700 focus:shadow-outline focus:outline-none"
+                          aria-label="Sign in"
+                          title="Sign in"
+                        >
+                          Sign in
+                        </button>
+                      )}
                     </li>
                   </ul>
                 </nav>
