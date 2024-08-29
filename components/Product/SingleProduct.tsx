@@ -3,6 +3,7 @@ import { MdShoppingCart } from "react-icons/md";
 import { useState } from "react";
 import Image from "next/image";
 import { useCart } from "../Context/CartContext";
+import { useUser } from "../Context/UserContext";
 import { toast } from "@/components/ui/use-toast";
 
 type Product = {
@@ -20,6 +21,7 @@ interface SingleProductProps {
 const SingleProduct: React.FC<SingleProductProps> = ({ product }) => {
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const { addToCart } = useCart();
+  const { user } = useUser();
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
@@ -27,6 +29,16 @@ const SingleProduct: React.FC<SingleProductProps> = ({ product }) => {
   };
 
   const handleAddToCart = () => {
+    if (!user) {
+      toast({
+        title: "Please log in",
+        description: "You need to be logged in to add items to your cart.",
+        duration: 3000,
+        variant: "destructive",
+      });
+      return;
+    }
+
     addToCart({
       productId: product.productId,
       name: product.name,
@@ -81,7 +93,8 @@ const SingleProduct: React.FC<SingleProductProps> = ({ product }) => {
           onClick={handleAddToCart}
           className="w-full bg-emerald-300 opacity-75 hover:opacity-100 text-emerald-900 hover:text-gray-900 rounded-full px-4 py-2 font-semibold text-sm"
         >
-          <MdShoppingCart className="inline -ml-1 mr-2" /> ADD TO CART
+          <MdShoppingCart className="inline -ml-1 mr-2" />
+          {user ? "ADD TO CART" : "LOGIN TO ADD"}
         </button>
       </div>
     </div>

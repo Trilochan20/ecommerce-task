@@ -4,9 +4,11 @@ import { useCart } from "@/components/Context/CartContext";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
+import { useUser } from "@/components/Context/UserContext";
 
 const CartPage = () => {
   const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
+  const { user } = useUser();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const totalPrice = cart.reduce(
@@ -30,6 +32,16 @@ const CartPage = () => {
   };
 
   const handleCheckout = () => {
+    if (!user) {
+      toast({
+        title: "Please log in",
+        description: "You need to be logged in to proceed to checkout.",
+        duration: 3000,
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsCheckingOut(true);
     // Simulate a checkout process
     setTimeout(() => {
@@ -96,10 +108,10 @@ const CartPage = () => {
                 />
               </div>
               <span className="text-center w-1/5 font-semibold text-sm">
-                ${item.price.toFixed(2)}
+                ₹{item.price.toFixed(2)}
               </span>
               <span className="text-center w-1/5 font-semibold text-sm">
-                ${(item.price * item.quantity).toFixed(2)}
+                ₹{(item.price * item.quantity).toFixed(2)}
               </span>
             </div>
           ))}
@@ -109,19 +121,23 @@ const CartPage = () => {
             <h2 className="text-lg font-bold mb-4">Order Summary</h2>
             <div className="flex justify-between mb-2">
               <span>Subtotal</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span>₹{totalPrice.toFixed(2)}</span>
             </div>
             <hr className="my-2" />
             <div className="flex justify-between mb-2">
               <span className="font-bold">Total</span>
-              <span className="font-bold">${totalPrice.toFixed(2)}</span>
+              <span className="font-bold">₹{totalPrice.toFixed(2)}</span>
             </div>
             <button
               onClick={handleCheckout}
-              disabled={isCheckingOut}
+              disabled={isCheckingOut || !user}
               className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full disabled:opacity-50"
             >
-              {isCheckingOut ? "Processing..." : "Checkout"}
+              {isCheckingOut
+                ? "Processing..."
+                : user
+                ? "Checkout"
+                : "Login to Checkout"}
             </button>
           </div>
         </div>

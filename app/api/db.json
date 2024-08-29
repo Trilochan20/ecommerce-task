@@ -12,56 +12,56 @@
       "name": "New Product 3",
       "quantity": 50,
       "price": 13.99,
-      "image": "https://picsum.photos/1920/1080?banana"
+      "image": "https://picsum.photos/320/250?banana"
     },
     {
       "productId": "oioih",
       "name": "New Product 4",
       "quantity": 20,
       "price": 16.99,
-      "image": "https://picsum.photos/1920/1080?oranges"
+      "image": "https://picsum.photos/320/250?oranges"
     },
     {
       "productId": "pqrst",
       "name": "New Product 5",
       "quantity": 35,
       "price": 19.99,
-      "image": "https://picsum.photos/1920/1080?grapes"
+      "image": "https://picsum.photos/320/250?grapes"
     },
     {
       "productId": "uvwxy",
       "name": "New Product 6",
       "quantity": 28,
       "price": 9.99,
-      "image": "https://picsum.photos/1920/1080?mango"
+      "image": "https://picsum.photos/320/250?mango"
     },
     {
       "productId": "zabcd",
       "name": "New Product 7",
       "quantity": 60,
       "price": 24.99,
-      "image": "https://picsum.photos/1920/1080?pineapple"
+      "image": "https://picsum.photos/320/250?pineapple"
     },
     {
       "productId": "efghi",
       "name": "New Product 8",
       "quantity": 15,
       "price": 34.99,
-      "image": "https://picsum.photos/1920/1080?kiwi"
+      "image": "https://picsum.photos/320/250?kiwi"
     },
     {
       "productId": "jklmn",
       "name": "New Product 9",
       "quantity": 55,
       "price": 7.99,
-      "image": "https://picsum.photos/1920/1080?strawberry"
+      "image": "https://picsum.photos/320/250?strawberry"
     },
     {
       "productId": "opqrs",
       "name": "New Product 10",
       "quantity": 40,
       "price": 29.99,
-      "image": "https://picsum.photos/1920/1080?watermelon"
+      "image": "https://picsum.photos/320/250?watermelon"
     }
   ],
   "users": [

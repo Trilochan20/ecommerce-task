@@ -31,6 +31,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       const savedCart = localStorage.getItem(`cart_${user.userId}`);
       if (savedCart) {
         setCart(JSON.parse(savedCart));
+      } else {
+        // If no saved cart for the user, use the current cart (for users who added items before logging in)
+        localStorage.setItem(`cart_${user.userId}`, JSON.stringify(cart));
+      }
+    } else {
+      // For logged out users, load the general cart
+      const generalCart = localStorage.getItem("cart");
+      if (generalCart) {
+        setCart(JSON.parse(generalCart));
       }
     }
   }, [user]);
@@ -38,6 +47,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     if (user) {
       localStorage.setItem(`cart_${user.userId}`, JSON.stringify(cart));
+    } else {
+      localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart, user]);
 
