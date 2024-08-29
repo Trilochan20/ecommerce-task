@@ -114,13 +114,12 @@ export async function POST(request: Request) {
   } else if (action === 'createUser') {
     return await createUser(request)
   } else {
-    // Existing product creation logic
     const body = await request.json()
     const newProduct: Product = {
-      productId: body.productId,
+      productId: randomUUID(), // Generate the productId here
       name: body.name,
-      quantity: body.quantity,
-      price: body.price,
+      quantity: parseInt(body.quantity, 10),
+      price: parseFloat(body.price),
       image: body.image
     }
 
@@ -136,6 +135,7 @@ export async function POST(request: Request) {
       })
     }
 
+    await db.read()
     db.data.products.push(newProduct)
     await db.write()
 

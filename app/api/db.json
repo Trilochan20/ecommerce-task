@@ -3,15 +3,15 @@
     {
       "productId": "aoiehgoieho",
       "name": "New Product 2",
-      "quantity": 43,
-      "price": 14.99,
-      "image": "https://picsum.photos/1920/1080?apple"
+      "quantity": 41,
+      "price": 42.21,
+      "image": "https://picsum.photos/320/250?apple"
     },
     {
       "productId": "ejhgie",
       "name": "New Product 3",
       "quantity": 50,
-      "price": 12.99,
+      "price": 13.99,
       "image": "https://picsum.photos/1920/1080?banana"
     },
     {
@@ -62,27 +62,6 @@
       "quantity": 40,
       "price": 29.99,
       "image": "https://picsum.photos/1920/1080?watermelon"
-    },
-    {
-      "productId": "tuvwx",
-      "name": "New Product 11",
-      "quantity": 25,
-      "price": 39.99,
-      "image": "https://picsum.photos/1920/1080?peach"
-    },
-    {
-      "productId": "yzabc",
-      "name": "New Product 12",
-      "quantity": 30,
-      "price": 17.99,
-      "image": "https://picsum.photos/1920/1080?cherry"
-    },
-    {
-      "productId": "defgh",
-      "name": "New Product 13",
-      "quantity": 45,
-      "price": 22.99,
-      "image": "https://picsum.photos/1920/1080?blueberry"
     }
   ],
   "users": [

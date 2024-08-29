@@ -2,6 +2,7 @@
 
 import { useUser } from "@/components/Context/UserContext";
 import { useState, useEffect } from "react";
+import AllProductsTable from "@/components/Dashboard/AllProductsTable";
 
 const DashboardPage = () => {
   const { user } = useUser();
@@ -36,7 +37,7 @@ const DashboardPage = () => {
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
       <div className="text-xl">
-        {user.role === "admin" ? "You're an admin" : "You're a user"}
+        {user.role === "admin" ? <AllProductsTable /> : "You're a user"}
       </div>
     </div>
   );
