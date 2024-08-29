@@ -1,6 +1,9 @@
 "use client";
 import { MdShoppingCart } from "react-icons/md";
 import { useState } from "react";
+import Image from "next/image";
+import { useCart } from "../Context/CartContext";
+import { toast } from "@/components/ui/use-toast";
 
 type Product = {
   productId: string;
@@ -16,19 +19,37 @@ interface SingleProductProps {
 
 const SingleProduct: React.FC<SingleProductProps> = ({ product }) => {
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const { addToCart } = useCart();
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
     setSelectedQuantity(Math.min(Math.max(1, value), product.quantity));
   };
 
+  const handleAddToCart = () => {
+    addToCart({
+      productId: product.productId,
+      name: product.name,
+      quantity: selectedQuantity,
+      price: product.price,
+      image: product.image,
+    });
+    toast({
+      title: "Added to cart",
+      description: `${selectedQuantity} ${product.name} added to your cart`,
+      duration: 2000,
+    });
+  };
+
   return (
     <div className="w-full max-w-sm rounded bg-white shadow-xl p-5 text-gray-800 relative">
       <div className="relative h-48 mb-4">
-        <img
+        <Image
           src={product.image || "https://via.placeholder.com/300"}
           className="w-full h-full object-cover"
           alt={product.name}
+          width={300}
+          height={300}
         />
       </div>
       <div>
@@ -56,7 +77,10 @@ const SingleProduct: React.FC<SingleProductProps> = ({ product }) => {
             />
           </div>
         </div>
-        <button className="w-full bg-emerald-300 opacity-75 hover:opacity-100 text-emerald-900 hover:text-gray-900 rounded-full px-4 py-2 font-semibold text-sm">
+        <button
+          onClick={handleAddToCart}
+          className="w-full bg-emerald-300 opacity-75 hover:opacity-100 text-emerald-900 hover:text-gray-900 rounded-full px-4 py-2 font-semibold text-sm"
+        >
           <MdShoppingCart className="inline -ml-1 mr-2" /> ADD TO CART
         </button>
       </div>

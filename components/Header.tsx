@@ -5,6 +5,9 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import CartIcon from "./CartIcon";
 import LoginModal from "./Auth/LoginModal";
 import { useUser } from "./Context/UserContext";
+import { useCart } from "./Context/CartContext";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 interface NavItem {
   label: string;
@@ -22,19 +25,21 @@ export const NavigationHeader: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { user, logout } = useUser();
+  const { cart } = useCart();
+
+  const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
 
   const openLoginModal = () => setIsLoginModalOpen(true);
   const closeLoginModal = () => setIsLoginModalOpen(false);
 
   const handleLogout = () => {
     logout();
-    // You might want to redirect the user or update the UI after logout
   };
 
   return (
     <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
       <div className="relative flex items-center justify-between">
-        <a
+        <Link
           href="/"
           aria-label="Company"
           title="Company"
@@ -43,7 +48,7 @@ export const NavigationHeader: React.FC = () => {
           <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
             STORE NAME
           </span>
-        </a>
+        </Link>
 
         {/* Desktop view */}
         <div className="hidden lg:flex lg:items-center lg:space-x-8">
@@ -51,26 +56,28 @@ export const NavigationHeader: React.FC = () => {
           <ul className="flex items-center space-x-8">
             {navItems.map((item) => (
               <li key={item.label}>
-                <a
+                <Link
                   href={item.href}
                   aria-label={item.label}
                   title={item.label}
                   className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-emerald-400"
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
 
           {/* Cart and Login/Logout */}
           <div className="flex items-center space-x-8">
-            <CartIcon />
+            <Link href="/cart">
+              <CartIcon itemCount={cartItemCount} />
+            </Link>
             {user ? (
               <>
-                <a href="/dashboard" className="hover:text-emerald-400">
+                <Link href="/dashboard" className="hover:text-emerald-400">
                   Welcome, {user.name}
-                </a>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white 
@@ -97,7 +104,9 @@ export const NavigationHeader: React.FC = () => {
 
         {/* Mobile view */}
         <div className="lg:hidden flex items-center">
-          <CartIcon />
+          <Link href="/cart">
+            <CartIcon itemCount={cartItemCount} />
+          </Link>
           <button
             aria-label="Open Menu"
             title="Open Menu"
@@ -111,7 +120,7 @@ export const NavigationHeader: React.FC = () => {
               <div className="p-5 bg-white border rounded shadow-sm">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <a
+                    <Link
                       href="/"
                       aria-label="Company"
                       title="Company"
@@ -120,7 +129,7 @@ export const NavigationHeader: React.FC = () => {
                       <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
                         STORE NAME
                       </span>
-                    </a>
+                    </Link>
                   </div>
                   <div>
                     <button
@@ -137,7 +146,7 @@ export const NavigationHeader: React.FC = () => {
                   <ul className="space-y-4">
                     {navItems.map((item) => (
                       <li key={item.label} className="p-2">
-                        <a
+                        <Link
                           href={item.href}
                           aria-label={item.label}
                           title={item.label}
@@ -145,13 +154,13 @@ export const NavigationHeader: React.FC = () => {
                           onClick={() => setIsMenuOpen(false)}
                         >
                           {item.label}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                     <li className="p-2">
                       {user ? (
                         <>
-                          <a
+                          <Link
                             href="/dashboard"
                             className="inline-flex items-center justify-center w-full h-12 px-6 mb-2 font-medium tracking-wide
                            text-slate-900 transition duration-200 rounded shadow-md 
@@ -159,7 +168,7 @@ export const NavigationHeader: React.FC = () => {
                             onClick={() => setIsMenuOpen(false)}
                           >
                             Welcome, {user.name}
-                          </a>
+                          </Link>
                           <button
                             onClick={() => {
                               handleLogout();

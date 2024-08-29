@@ -12,9 +12,9 @@
         [x] Create Single Product Page
     [ ] Dashboard Page
         [ ] Role Admin 
-            [ ] Create Product
-            [ ] Create Discount
-            [ ] All Product List
+            [x] Create Product
+            [ ] Create Discount Codes
+            [x] All Product List
             [ ] All Discount List
         [ ] Role User
             [ ] Name 
@@ -30,6 +30,6 @@
         [x] create user (signup)
         [x] get all users
         [x] login
-        [ ] logout
+        [x] logout - FrontEnd
         [ ] create order history under user
     [ ] Create discount api

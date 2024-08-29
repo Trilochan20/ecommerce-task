@@ -104,5 +104,11 @@
       "password": "123456",
       "orders": []
     }
+  ],
+  "discountCodes": [
+    {
+      "code": "DISCOUNT10",
+      "discount": 10
+    }
   ]
 }
