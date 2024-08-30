@@ -3,14 +3,14 @@
     {
       "productId": "aoiehgoieho",
       "name": "New Product 2",
-      "quantity": 41,
+      "quantity": 26,
       "price": 42.21,
       "image": "https://picsum.photos/320/250?apple"
     },
     {
       "productId": "ejhgie",
       "name": "New Product 3",
-      "quantity": 50,
+      "quantity": 39,
       "price": 13.99,
       "image": "https://picsum.photos/320/250?banana"
     },
@@ -73,42 +73,67 @@
       "role": "admin"
     },
     {
-      "name": "User Name",
-      "email": "user@examplenew.com",
-      "password": "userpassword",
-      "userId": "348dd77c-09bc-4ab3-b0d9-e31c57c7aee9",
-      "role": "user",
-      "orders": []
-    },
-    {
-      "name": "New User 4",
-      "email": "user@lalala.com",
-      "password": "kjbkjb",
-      "userId": "4b59f97e-67b9-4439-87af-5188b9968271",
-      "role": "user",
-      "orders": []
-    },
-    {
-      "name": "New user 5",
-      "email": "user@kadali.com",
-      "role": "user",
-      "userId": "191f1765-f8f8-4410-a508-b31e208cb6d8",
-      "password": "kjbkjb",
-      "orders": []
-    },
-    {
       "name": "Abc",
       "email": "abc@xyz.com",
       "role": "user",
       "userId": "c039c9bd-ff30-42cf-9367-98f37342c657",
       "password": "123456",
-      "orders": []
+      "orders": [
+        {
+          "orderId": "5834e074-7fcf-45b8-811d-ea83b950ca47",
+          "items": [
+            {
+              "productId": "aoiehgoieho",
+              "name": "New Product 2",
+              "quantity": 2,
+              "orderedPrice": 42.21,
+              "price": 42.21
+            },
+            {
+              "productId": "ejhgie",
+              "name": "New Product 3",
+              "quantity": 2,
+              "orderedPrice": 13.99,
+              "price": 13.99
+            }
+          ],
+          "totalAmount": 112.4,
+          "discountApplied": 0,
+          "finalAmount": 112.4,
+          "date": "2024-08-30T09:18:25.710Z"
+        },
+        {
+          "orderId": "bf1c90be-fe00-4c2c-a393-491d0e1d59f7",
+          "items": [
+            {
+              "productId": "aoiehgoieho",
+              "name": "New Product 2",
+              "quantity": 2,
+              "orderedPrice": 42.21,
+              "price": 42.21
+            },
+            {
+              "productId": "ejhgie",
+              "name": "New Product 3",
+              "quantity": 2,
+              "orderedPrice": 13.99,
+              "price": 13.99
+            }
+          ],
+          "totalAmount": 112.4,
+          "discountApplied": 0,
+          "finalAmount": 112.4,
+          "date": "2024-08-30T10:51:37.597Z"
+        }
+      ]
     }
   ],
   "discountCodes": [
     {
       "code": "DISCOUNT10",
-      "discount": 10
+      "discount": 10,
+      "isAvailable": true
     }
-  ]
+  ],
+  "discountOrder": 3
 }

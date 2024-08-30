@@ -10,6 +10,7 @@ const CartPage = () => {
   const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
   const { user } = useUser();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [discountCode, setDiscountCode] = useState("");
 
   const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -31,7 +32,7 @@ const CartPage = () => {
     });
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!user) {
       toast({
         title: "Please log in",
@@ -43,16 +44,50 @@ const CartPage = () => {
     }
 
     setIsCheckingOut(true);
-    // Simulate a checkout process
-    setTimeout(() => {
-      clearCart();
-      setIsCheckingOut(false);
-      toast({
-        title: "Checkout complete",
-        description: "Thank you for your purchase!",
-        duration: 2000,
+
+    try {
+      const response = await fetch("/api?action=checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.userId,
+          cartItems: cart.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            orderedPrice: item.price, // Use the current price as orderedPrice
+            name: item.name,
+          })),
+          discountCode: discountCode,
+        }),
       });
-    }, 2000);
+
+      const data = await response.json();
+
+      if (response.ok) {
+        clearCart();
+        toast({
+          title: "Checkout complete",
+          description: data.message,
+          duration: 2000,
+        });
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      toast({
+        title: "Checkout failed",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An error occurred during checkout",
+        duration: 3000,
+        variant: "destructive",
+      });
+    } finally {
+      setIsCheckingOut(false);
+    }
   };
 
   if (cart.length === 0) {
@@ -128,6 +163,13 @@ const CartPage = () => {
               <span className="font-bold">Total</span>
               <span className="font-bold">₹{totalPrice.toFixed(2)}</span>
             </div>
+            <input
+              type="text"
+              value={discountCode}
+              onChange={(e) => setDiscountCode(e.target.value)}
+              placeholder="Enter discount code"
+              className="border p-2 w-full mb-2"
+            />
             <button
               onClick={handleCheckout}
               disabled={isCheckingOut || !user}

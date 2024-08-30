@@ -19,14 +19,17 @@
         [ ] Role User
             [ ] Name 
             [ ] Order History
-            [ ] Address
-    [ ] Create Cart Page
-    [ ] Checkout Page
+    [x] Create Cart Page
+        [x] Add to cart
+        [x] Remove from cart
+        [x] Cart Total
         [ ] Discount Apply
+        [ ] Checkout Flow
+        
 [ ] Backend
     [x] install lowdb
     [x] Create CRUD apis
-    [ ] Create auth apis    
+    [x] Create auth apis    
         [x] create user (signup)
         [x] get all users
         [x] login
