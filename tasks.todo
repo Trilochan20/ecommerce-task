@@ -1,7 +1,7 @@
 [x] Project Setup
-[ ] Dummy JSON for Products
+[x] Dummy JSON for Products
 [ ] FrontEnd
-    [ ] Handle Auth
+    [x] Handle Auth
         [x] Login Modal
         [x] Login form
         [x] Signup form
@@ -13,18 +13,18 @@
     [ ] Dashboard Page
         [ ] Role Admin 
             [x] Create Product
-            [ ] Create Discount Codes
             [x] All Product List
-            [ ] All Discount List
+            [x] All Discount List
+            [ ] All Order List per user
         [ ] Role User
             [ ] Name 
-            [ ] Order History
+            [x] Order History
     [x] Create Cart Page
         [x] Add to cart
         [x] Remove from cart
         [x] Cart Total
-        [ ] Discount Apply
-        [ ] Checkout Flow
+        [x] Discount Apply
+        [x] Checkout Flow
         
 [ ] Backend
     [x] install lowdb
@@ -34,7 +34,7 @@
         [x] get all users
         [x] login
         [x] logout - FrontEnd
-        [ ] create order history under user
-    [ ] Create discount api
-        [ ] Generate discount code
-        [ ] List discount code
+        [x] create order history under user
+    [x] Create discount api
+        [x] Generate discount code
+        [x] List discount code
