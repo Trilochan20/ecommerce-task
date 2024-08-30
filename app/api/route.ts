@@ -3,66 +3,7 @@ import { JSONFile } from 'lowdb/node'
 import { join } from 'path'
 import { randomUUID } from 'crypto';
 import { nanoid } from 'nanoid';
-
-// type defination for database structure
-type Product = {
-  productId: string,
-  name: string,
-  quantity: number,
-  price: number,
-  image?: string
-}
-
-type CartItem = {
-  productId: string,
-  quantity: number,
-  name: string,
-  orderedPrice: number,
-  currentPrice: number
-}
-
-// Update the OrderItem interface
-interface OrderItem {
-  productId: string;
-  name: string;
-  quantity: number;
-  orderedPrice: number;
-  price: number; 
-}
-
-// Update the Order interface
-interface Order {
-  orderId: string;
-  items: OrderItem[];
-  totalAmount: number;
-  discountApplied: number;
-  finalAmount: number;
-  date: string;
-  appliedDiscountCode?: string; //  line
-}
-
-type User = {
-  name: string,
-  email: string,
-  userId: string,
-  password: string,
-  role: string,
-  orders: Order[]
-}
-
-type Schema = {
-  products: Product[],
-  users: User[],
-  discountCodes: DiscountCode[],
-  discountOrder: number
-}
-
-//  this type for discount codes
-type DiscountCode = {
-  code: string,
-  discount: number,
-  isAvailable: boolean
-}
+import { Product, CartItem, OrderItem, Order, User, Schema, DiscountCode } from './types';
 
 // Define the default data
 const defaultData: Schema = {
@@ -76,7 +17,6 @@ const defaultData: Schema = {
 const file = join(process.cwd(), 'app/api/db.json') //db file path
 const adapter = new JSONFile<Schema>(file)
 const db = new Low<Schema>(adapter, defaultData)
-
 
 // validation function 
 function validateProduct(product: Partial<Product>): string | null {
@@ -103,91 +43,76 @@ export async function GET(request: Request) {
 
     await db.read()
 
-    if (action === 'getUserOrders' && userId) {
-        const user = db.data.users.find(u => u.userId === userId)
-        if (!user) {
-            return new Response(JSON.stringify({
-                message: 'User not found'
-            }), {
-                headers: { 'Content-Type': 'application/json' },
-                status: 404
-            })
-        }
-        console.log('User orders:', user.orders);  
-        return new Response(JSON.stringify({
-            orders: user.orders || []  // Return an empty array if orders is undefined
-        }), {
-            headers: { 'Content-Type': 'application/json' },
-            status: 200
-        })
-    } else if (action === 'getProduct' && productId) {
-        const product = await getProductById(productId)
-        if (product) {
-            return new Response(JSON.stringify({ product }), {
-                headers: { 'Content-Type': 'application/json' },
-                status: 200
-            })
-        } else {
-            return new Response(JSON.stringify({ message: 'Product not found' }), {
-                headers: { 'Content-Type': 'application/json' },
-                status: 404
-            })
-        }
-    } else if (action === 'getUsers') {
-        const users = await getAllNonAdminUsers()
-        return new Response(JSON.stringify({
-            users: users
-        }), {
-            headers: {
-                'Content-Type': 'application/json'
+    switch (action) {
+        case 'getUserOrders':
+            if (userId) {
+                return await getUserOrders(userId)
             }
-        })
-    } else if (action === 'getUserOrderCount' && userId) {
-      return await getUserOrderCount(userId)
-    } else if (action === 'getDiscountOrder') {
-      return await getDiscountOrder()
-    } else if (action === 'getDiscountCodes') {
-        await db.read()
-        return new Response(JSON.stringify({
-            discountCodes: db.data.discountCodes
-        }), {
-            headers: { 'Content-Type': 'application/json' },
-            status: 200
-        })
-    } else if (action === 'getAllOrders') {
-        await db.read()
-        const allOrders = db.data.users.flatMap(user => 
-            (user.orders || []).map(order => ({
-                ...order,
-                userId: user.userId,
-                userName: user.name
-            }))
-        ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            break
+        case 'getProduct':
+            if (productId) {
+                return await getProductResponse(productId)
+            }
+            break
+        case 'getUsers':
+            return await getUsersResponse()
+        case 'getUserOrderCount':
+            if (userId) {
+                return await getUserOrderCount(userId)
+            }
+            break
+        case 'getDiscountOrder':
+            return await getDiscountOrder()
+        case 'getDiscountCodes':
+            return await getDiscountCodesResponse()
+        case 'getAllOrders':
+            return await getAllOrdersResponse()
+        case 'getAllUsers':
+            return await getAllUsersResponse()
+        default:
+            return await getAllProductsResponse()
+    }
 
-        return new Response(JSON.stringify({
-            orders: allOrders
-        }), {
+    return new Response(JSON.stringify({ message: 'Invalid request' }), {
+        headers: { 'Content-Type': 'application/json' },
+        status: 400
+    })
+}
+
+async function getUserOrders(userId: string) {
+    const user = db.data.users.find(u => u.userId === userId)
+    if (!user) {
+        return new Response(JSON.stringify({ message: 'User not found' }), {
             headers: { 'Content-Type': 'application/json' },
-            status: 200
+            status: 404
         })
-    } else if (action === 'getAllUsers') {
-        const users = await getAllUsers()
-        return new Response(JSON.stringify({
-            users: users
-        }), {
+    }
+    return new Response(JSON.stringify({ orders: user.orders || [] }), {
+        headers: { 'Content-Type': 'application/json' },
+        status: 200
+    })
+}
+
+async function getProductResponse(productId: string) {
+    const product = await getProductById(productId)
+    if (product) {
+        return new Response(JSON.stringify({ product }), {
             headers: { 'Content-Type': 'application/json' },
             status: 200
         })
     } else {
-        // Return all products (existing functionality)
-        return new Response(JSON.stringify({
-            products: db.data.products
-        }), {
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        return new Response(JSON.stringify({ message: 'Product not found' }), {
+            headers: { 'Content-Type': 'application/json' },
+            status: 404
         })
     }
+}
+
+async function getUsersResponse() {
+    const users = await getAllNonAdminUsers()
+    return new Response(JSON.stringify({ users }), {
+        headers: { 'Content-Type': 'application/json' }
+    })
 }
 
 async function getUserOrderCount(userId: string | null) {
@@ -220,6 +145,42 @@ async function getDiscountOrder() {
     headers: { 'Content-Type': 'application/json' },
     status: 200
   })
+}
+
+async function getDiscountCodesResponse() {
+    return new Response(JSON.stringify({ discountCodes: db.data.discountCodes }), {
+        headers: { 'Content-Type': 'application/json' },
+        status: 200
+    })
+}
+
+async function getAllOrdersResponse() {
+    const allOrders = db.data.users.flatMap(user => 
+        (user.orders || []).map(order => ({
+            ...order,
+            userId: user.userId,
+            userName: user.name
+        }))
+    ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+
+    return new Response(JSON.stringify({ orders: allOrders }), {
+        headers: { 'Content-Type': 'application/json' },
+        status: 200
+    })
+}
+
+async function getAllUsersResponse() {
+    const users = await getAllUsers()
+    return new Response(JSON.stringify({ users }), {
+        headers: { 'Content-Type': 'application/json' },
+        status: 200
+    })
+}
+
+async function getAllProductsResponse() {
+    return new Response(JSON.stringify({ products: db.data.products }), {
+        headers: { 'Content-Type': 'application/json' }
+    })
 }
 
 
@@ -534,24 +495,6 @@ async function loginUser(email: string, password: string): Promise<{ user: User 
 }
 
 // Update the handleCheckout function
-interface OrderItem {
-  productId: string;
-  name: string;
-  quantity: number;
-  orderedPrice: number;
-  price: number;
-}
-
-interface Order {
-  orderId: string;
-  items: OrderItem[];
-  totalAmount: number;
-  discountApplied: number;
-  finalAmount: number;
-  date: string;
-  appliedDiscountCode?: string; //  line
-}
-
 async function handleCheckout(userId: string, cartItems: CartItem[], discountCode?: string): Promise<{ success: boolean, message: string, order?: Order, newDiscountCode?: DiscountCode }> {
   await db.read()
 
