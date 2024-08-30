@@ -21,3 +21,11 @@ Login using admin to see the admin dashboard and access all products list, add n
 see all users and their order history, see all discount codes list, and see all orders list.
 
 Create user account using the login/signup modal and login to see the user dashboard and access the order history.
+
+tests are in **tests** folder
+
+```bash
+bun test
+```
+
+using `bun:test` for testing purpose

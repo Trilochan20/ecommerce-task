@@ -16,7 +16,12 @@ const defaultData: Schema = {
 // Initialize lowdb
 const file = join(process.cwd(), 'app/api/db.json') //db file path
 const adapter = new JSONFile<Schema>(file)
-const db = new Low<Schema>(adapter, defaultData)
+let db = new Low<Schema>(adapter, defaultData)
+
+// Function to set the database (for testing purposes)
+export function setDatabase(mockDb: Low<Schema>) {
+  db = mockDb;
+}
 
 // validation function 
 function validateProduct(product: Partial<Product>): string | null {
@@ -312,114 +317,67 @@ function validateProductUpdate(updates: Partial<Product>): string | null {
 }
 
 
-// update product with product-id 
+// Update the PUT function
 export async function PUT(request: Request) {
-    await db.read()
+  await db.read()
+  const body = await request.json()
+  const { productId, ...updates } = body
 
-    const body = await request.json()
-    const { productId, ...updates } = body
+  const productIndex = db.data.products.findIndex(p => p.productId === productId)
 
-    if (typeof productId !== 'string') {
-        return new Response(JSON.stringify({
-            message: 'Product ID must be a string'
-        }), {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            status: 400
-        })
-    }
-
-    const productIndex = db.data.products.findIndex(p => p.productId === productId)
-
-    if (productIndex === -1) {
-        return new Response(JSON.stringify({
-            message: 'Product not found'
-        }), {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            status: 404
-        })
-    }
-
-    const validationError = validateProductUpdate(updates);
-    if (validationError) {
-        return new Response(JSON.stringify({
-            message: validationError
-        }), {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            status: 400
-        })
-    }
-
-    const updatedProduct: Product = {
-        ...db.data.products[productIndex],
-        ...updates
-    }
-
-    db.data.products[productIndex] = updatedProduct
-    await db.write()
-
-    return new Response(JSON.stringify({
-        message: 'Product updated successfully',
-        product: updatedProduct
-    }), {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        status: 200
+  if (productIndex === -1) {
+    return new Response(JSON.stringify({ message: 'Product not found' }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 404
     })
+  }
+
+  db.data.products[productIndex] = { ...db.data.products[productIndex], ...updates }
+  await db.write()
+
+  return new Response(JSON.stringify({
+    message: 'Product updated successfully',
+    product: db.data.products[productIndex]
+  }), {
+    headers: { 'Content-Type': 'application/json' },
+    status: 200
+  })
 }
 
 
 
-//delete a product
-
+// Update the DELETE function
 export async function DELETE(request: Request) {
-    await db.read()
+  await db.read()
+  const { searchParams } = new URL(request.url)
+  const productId = searchParams.get('productId')
 
-    const { searchParams } = new URL(request.url)
-    const productId = searchParams.get('productId')
-
-    if (!productId) {
-        return new Response(JSON.stringify({
-            message: 'Product ID is required'
-        }), {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            status: 400
-        })
-    }
-
-    const productIndex = db.data.products.findIndex(p => p.productId === productId)
-
-    if (productIndex === -1) {
-        return new Response(JSON.stringify({
-            message: 'Product not found'
-        }), {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            status: 404
-        })
-    }
-
-    const deletedProduct = db.data.products.splice(productIndex, 1)[0]
-    await db.write()
-
-    return new Response(JSON.stringify({
-        message: 'Product deleted successfully',
-        product: deletedProduct
-    }), {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        status: 200
+  if (!productId) {
+    return new Response(JSON.stringify({ message: 'Product ID is required' }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 400
     })
+  }
+
+  const productIndex = db.data.products.findIndex(p => p.productId === productId)
+
+  if (productIndex === -1) {
+    return new Response(JSON.stringify({ message: 'Product not found' }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 404
+    })
+  }
+
+  const deletedProduct = db.data.products.splice(productIndex, 1)[0]
+  await db.write()
+
+  return new Response(JSON.stringify({
+    message: 'Product deleted successfully',
+    product: deletedProduct
+  }), {
+    headers: { 'Content-Type': 'application/json' },
+    status: 200
+  })
 }
 
 // Check if user exists
