@@ -16,8 +16,8 @@
             [x] All Product List
             [x] All Discount List
             [ ] All Order List per user
-        [ ] Role User
-            [ ] Name 
+        [x] Role User
+            [x] Name - header 
             [x] Order History
     [x] Create Cart Page
         [x] Add to cart

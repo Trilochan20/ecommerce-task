@@ -115,7 +115,7 @@ export async function GET(request: Request) {
         }
         console.log('User orders:', user.orders);  
         return new Response(JSON.stringify({
-            orders: user.orders
+            orders: user.orders || []  // Return an empty array if orders is undefined
         }), {
             headers: { 'Content-Type': 'application/json' },
             status: 200
@@ -150,6 +150,30 @@ export async function GET(request: Request) {
         await db.read()
         return new Response(JSON.stringify({
             discountCodes: db.data.discountCodes
+        }), {
+            headers: { 'Content-Type': 'application/json' },
+            status: 200
+        })
+    } else if (action === 'getAllOrders') {
+        await db.read()
+        const allOrders = db.data.users.flatMap(user => 
+            (user.orders || []).map(order => ({
+                ...order,
+                userId: user.userId,
+                userName: user.name
+            }))
+        ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+
+        return new Response(JSON.stringify({
+            orders: allOrders
+        }), {
+            headers: { 'Content-Type': 'application/json' },
+            status: 200
+        })
+    } else if (action === 'getAllUsers') {
+        const users = await getAllUsers()
+        return new Response(JSON.stringify({
+            users: users
         }), {
             headers: { 'Content-Type': 'application/json' },
             status: 200
@@ -735,5 +759,10 @@ async function setDiscountOrder(request: Request) {
     headers: { 'Content-Type': 'application/json' },
     status: 200
   })
+}
+
+async function getAllUsers(): Promise<Omit<User, 'password'>[]> {
+  await db.read()
+  return db.data.users.map(({ password, ...user }) => user);
 }
 

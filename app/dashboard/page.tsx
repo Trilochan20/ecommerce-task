@@ -7,6 +7,8 @@ import AllOrderList from "@/components/Dashboard/User/AllOrderList";
 import DiscountOrder from "@/components/Dashboard/discountOrder";
 import AllDiscountCodes from "@/components/Dashboard/AllDiscountCodes";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import StoreAllOrderList from "@/components/Dashboard/StoreAllOrderList";
+import AllUsersList from "@/components/Dashboard/AllUsersList";
 
 const DashboardPage = () => {
   const { user } = useUser();
@@ -42,10 +44,12 @@ const DashboardPage = () => {
       <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
       {user.role === "admin" ? (
         <Tabs defaultValue="products" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="discount-order">Discount Order</TabsTrigger>
             <TabsTrigger value="discount-codes">Discount Codes</TabsTrigger>
+            <TabsTrigger value="all-orders">All Orders</TabsTrigger>
+            <TabsTrigger value="all-users">All Users</TabsTrigger>
           </TabsList>
           <TabsContent value="products">
             <AllProductsTable />
@@ -55,6 +59,12 @@ const DashboardPage = () => {
           </TabsContent>
           <TabsContent value="discount-codes">
             <AllDiscountCodes />
+          </TabsContent>
+          <TabsContent value="all-orders">
+            <StoreAllOrderList />
+          </TabsContent>
+          <TabsContent value="all-users">
+            <AllUsersList />
           </TabsContent>
         </Tabs>
       ) : (
