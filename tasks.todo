@@ -36,3 +36,5 @@
         [x] logout - FrontEnd
         [ ] create order history under user
     [ ] Create discount api
+        [ ] Generate discount code
+        [ ] List discount code

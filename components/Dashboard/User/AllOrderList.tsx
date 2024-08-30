@@ -15,6 +15,8 @@ type Order = {
   totalAmount: number;
   finalAmount: number;
   items: CartItem[];
+  appliedDiscountCode?: string;
+  discountApplied: number;
 };
 
 type Product = {
@@ -38,7 +40,7 @@ const AllOrderList = () => {
           );
           if (response.ok) {
             const data = await response.json();
-            console.log("Fetched orders:", data.orders);
+            // console.log("Fetched orders:", data.orders);
             setOrders(data.orders);
           } else {
             console.error("Failed to fetch orders");
@@ -92,16 +94,27 @@ const AllOrderList = () => {
                 {new Date(order.date).toLocaleDateString()}
               </p>
               <p>
-                <strong>Total Amount:</strong> ${order.totalAmount.toFixed(2)}
+                <strong>Total Amount:</strong> ₹{order.totalAmount.toFixed(2)}
               </p>
+              {order.appliedDiscountCode && (
+                <p>
+                  <strong>Discount Code:</strong> {order.appliedDiscountCode}
+                </p>
+              )}
+              {order.discountApplied > 0 && (
+                <p>
+                  <strong>Discount Applied:</strong> ₹
+                  {order.discountApplied.toFixed(2)}
+                </p>
+              )}
               <p>
-                <strong>Final Amount:</strong> ${order.finalAmount.toFixed(2)}
+                <strong>Final Amount:</strong> ₹{order.finalAmount.toFixed(2)}
               </p>
               <h3 className="font-semibold mt-2">Items:</h3>
               <ul className="list-disc pl-5">
                 {order.items.map((item) => (
                   <li key={item.productId}>
-                    {item.name} - Quantity: {item.quantity} - Price: $
+                    {item.name} - Quantity: {item.quantity} - Price: ₹
                     {item.price?.toFixed(2)}
                   </li>
                 ))}

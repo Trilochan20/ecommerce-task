@@ -2,6 +2,7 @@ import { Low } from 'lowdb'
 import { JSONFile } from 'lowdb/node'
 import { join } from 'path'
 import { randomUUID } from 'crypto';
+import { nanoid } from 'nanoid';
 
 // type defination for database structure
 type Product = {
@@ -26,7 +27,7 @@ interface OrderItem {
   name: string;
   quantity: number;
   orderedPrice: number;
-  price: number; // This is the current price of the product
+  price: number; 
 }
 
 // Update the Order interface
@@ -37,6 +38,7 @@ interface Order {
   discountApplied: number;
   finalAmount: number;
   date: string;
+  appliedDiscountCode?: string; //  line
 }
 
 type User = {
@@ -51,7 +53,8 @@ type User = {
 type Schema = {
   products: Product[],
   users: User[],
-  discountCodes: DiscountCode[]
+  discountCodes: DiscountCode[],
+  discountOrder: number
 }
 
 //  this type for discount codes
@@ -65,7 +68,8 @@ type DiscountCode = {
 const defaultData: Schema = {
   products: [],
   users: [],
-  discountCodes: []
+  discountCodes: [],
+  discountOrder: 5
 }
 
 // Initialize lowdb
@@ -138,6 +142,18 @@ export async function GET(request: Request) {
                 'Content-Type': 'application/json'
             }
         })
+    } else if (action === 'getUserOrderCount' && userId) {
+      return await getUserOrderCount(userId)
+    } else if (action === 'getDiscountOrder') {
+      return await getDiscountOrder()
+    } else if (action === 'getDiscountCodes') {
+        await db.read()
+        return new Response(JSON.stringify({
+            discountCodes: db.data.discountCodes
+        }), {
+            headers: { 'Content-Type': 'application/json' },
+            status: 200
+        })
     } else {
         // Return all products (existing functionality)
         return new Response(JSON.stringify({
@@ -148,6 +164,38 @@ export async function GET(request: Request) {
             }
         })
     }
+}
+
+async function getUserOrderCount(userId: string | null) {
+  if (!userId) {
+    return new Response(JSON.stringify({ message: 'User ID is required' }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 400
+    })
+  }
+
+  await db.read()
+  const user = db.data.users.find(u => u.userId === userId)
+  if (!user) {
+    return new Response(JSON.stringify({ message: 'User not found' }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 404
+    })
+  }
+
+  const orderCount = user.orders?.length || 0
+  return new Response(JSON.stringify({ orderCount }), {
+    headers: { 'Content-Type': 'application/json' },
+    status: 200
+  })
+}
+
+async function getDiscountOrder() {
+  await db.read()
+  return new Response(JSON.stringify({ discountOrder: db.data.discountOrder }), {
+    headers: { 'Content-Type': 'application/json' },
+    status: 200
+  })
 }
 
 
@@ -163,6 +211,10 @@ export async function POST(request: Request) {
       return await createUser(request)
     case 'checkout':
       return await handleCheckoutRequest(request)
+    case 'generateDiscountCode':
+      return await generateDiscountCode(request)
+    case 'setDiscountOrder':
+      return await setDiscountOrder(request)
     default:
       return await handleProductCreation(request)
   }
@@ -194,8 +246,12 @@ async function handleLogin(request: Request) {
 async function handleCheckoutRequest(request: Request) {
   const { userId, cartItems, discountCode } = await request.json()
 
+  // console.log("Received checkout request:", { userId, cartItems, discountCode });
+
   if (!userId || !Array.isArray(cartItems) || cartItems.length === 0) {
+    console.error("Invalid checkout request:", { userId, cartItems, discountCode });
     return new Response(JSON.stringify({
+      success: false,
       message: "Invalid request. userId and non-empty cartItems are required."
     }), {
       headers: { 'Content-Type': 'application/json' },
@@ -207,14 +263,17 @@ async function handleCheckoutRequest(request: Request) {
 
   if (result.success) {
     return new Response(JSON.stringify({
+      success: true,
       message: result.message,
-      order: result.order
+      order: result.order,
+      newDiscountCode: result.newDiscountCode
     }), {
       headers: { 'Content-Type': 'application/json' },
       status: 200
     })
   } else {
     return new Response(JSON.stringify({
+      success: false,
       message: result.message
     }), {
       headers: { 'Content-Type': 'application/json' },
@@ -466,28 +525,61 @@ interface Order {
   discountApplied: number;
   finalAmount: number;
   date: string;
+  appliedDiscountCode?: string; //  line
 }
 
-async function handleCheckout(userId: string, cartItems: CartItem[], discountCode?: string): Promise<{ success: boolean, message: string, order?: Order }> {
+async function handleCheckout(userId: string, cartItems: CartItem[], discountCode?: string): Promise<{ success: boolean, message: string, order?: Order, newDiscountCode?: DiscountCode }> {
   await db.read()
+
+  // console.log("Starting handleCheckout function");
+
+  if (!db.data || !db.data.users) {
+    console.error("Database or users array is undefined");
+    return { success: false, message: "Database error. Please try again later." };
+  }
 
   const userIndex = db.data.users.findIndex(u => u.userId === userId)
   if (userIndex === -1) {
+    console.error(`User not found for userId: ${userId}`);
     return { success: false, message: "User not found" }
   }
 
-  let totalAmount = 0
+  // console.log(`User found at index: ${userIndex}`);
+
+  // Count total orders across all users
+  const totalOrders = db.data.users.reduce((sum, user) => sum + (user.orders?.length || 0), 0)
+  // console.log(`Total orders: ${totalOrders}`);
+
   let discountApplied = 0
+  let newDiscountCode: DiscountCode | undefined
+
+  // Check if this order qualifies for a new discount code
+  if ((totalOrders + 1) % (db.data.discountOrder || 5) === 0) {
+    newDiscountCode = {
+      code: nanoid(8).toUpperCase(),
+      discount: 10, // 10% discount
+      isAvailable: true
+    }
+    db.data.discountCodes = db.data.discountCodes || [];
+    db.data.discountCodes.push(newDiscountCode)
+    console.log(`New discount code generated: ${newDiscountCode.code}`);
+  }
+
+  let totalAmount = 0
   const updatedProducts: Product[] = []
   const orderItems: OrderItem[] = []
 
+  // console.log("Processing cart items:");
   // Calculate total amount and update product quantities
   for (const item of cartItems) {
+    // console.log(`Processing item: ${item.productId}`);
     const product = await getProductById(item.productId)
     if (!product) {
+      console.error(`Product not found: ${item.productId}`);
       return { success: false, message: `Product not found: ${item.productId}` }
     }
     if (product.quantity < item.quantity) {
+      console.error(`Insufficient quantity for product: ${product.name}`);
       return { success: false, message: `Insufficient quantity for product: ${product.name}` }
     }
     const itemTotal = item.orderedPrice * item.quantity
@@ -502,21 +594,28 @@ async function handleCheckout(userId: string, cartItems: CartItem[], discountCod
       orderedPrice: item.orderedPrice,
       price: product.price
     })
+    console.log(`Item processed: ${item.productId}, New quantity: ${product.quantity}`);
   }
 
+  // console.log(`Total amount: ${totalAmount}`);
+
   // Apply discount if code is provided and valid
-  if (discountCode) {
+  if (discountCode && db.data.discountCodes) {
+    // console.log(`Applying discount code: ${discountCode}`);
     const discountIndex = db.data.discountCodes.findIndex(d => d.code === discountCode && d.isAvailable)
     if (discountIndex !== -1) {
       const discount = db.data.discountCodes[discountIndex]
       discountApplied = totalAmount * (discount.discount / 100)
       db.data.discountCodes[discountIndex].isAvailable = false
+      console.log(`Discount applied: ${discountApplied}`);
     } else {
+      console.error(`Invalid or unavailable discount code: ${discountCode}`);
       return { success: false, message: "Invalid or unavailable discount code" }
     }
   }
 
   const finalAmount = totalAmount - discountApplied
+  // console.log(`Final amount: ${finalAmount}`);
 
   const newOrder: Order = {
     orderId: randomUUID(),
@@ -524,8 +623,11 @@ async function handleCheckout(userId: string, cartItems: CartItem[], discountCod
     totalAmount: totalAmount,
     discountApplied: discountApplied,
     finalAmount: finalAmount,
-    date: new Date().toISOString()
+    date: new Date().toISOString(),
+    appliedDiscountCode: discountCode 
   }
+
+  // console.log("New order created:", newOrder);
 
   // Update the database
   if (!db.data.users[userIndex].orders) {
@@ -534,15 +636,104 @@ async function handleCheckout(userId: string, cartItems: CartItem[], discountCod
   db.data.users[userIndex].orders.push(newOrder)
   db.data.products = db.data.products.map(p => updatedProducts.find(up => up.productId === p.productId) || p)
   
-  console.log('Before writing to database:', JSON.stringify(db.data, null, 2));
+  // console.log('Before writing to database:', JSON.stringify(db.data, null, 2));
   
   try {
     await db.write()
-    console.log('After writing to database:', JSON.stringify(db.data, null, 2));
-    return { success: true, message: "Order placed successfully", order: newOrder }
+    // console.log('After writing to database:', JSON.stringify(db.data, null, 2));
+    return { success: true, message: "Order placed successfully", order: newOrder, newDiscountCode }
   } catch (error) {
     console.error("Error writing to database:", error)
     return { success: false, message: "Error processing order. Please try again." }
   }
+}
+
+async function generateDiscountCode(request: Request) {
+  await db.read()
+
+  const body = await request.json()
+  const { userId } = body
+
+  const user = db.data.users.find(u => u.userId === userId)
+  if (!user) {
+    return new Response(JSON.stringify({
+      message: 'User not found'
+    }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 404
+    })
+  }
+
+  // Check if the user is eligible for a discount
+  const userOrderCount = user.orders?.length || 0
+  if ((userOrderCount + 1) % db.data.discountOrder !== 0) {
+    return new Response(JSON.stringify({
+      message: 'User is not eligible for a discount',
+      isEligible: false
+    }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 200
+    })
+  }
+
+  // Find an available discount code
+  let availableDiscountCode = db.data.discountCodes.find(code => code.isAvailable)
+
+  // If no available discount code, generate a new one
+  if (!availableDiscountCode) {
+    availableDiscountCode = {
+      code: nanoid(8).toUpperCase(),
+      discount: 10, // 10% discount
+      isAvailable: true
+    }
+    db.data.discountCodes.push(availableDiscountCode)
+    await db.write() // Save the new discount code to the database
+  }
+
+  return new Response(JSON.stringify({
+    message: 'Discount code found',
+    isEligible: true,
+    discountCode: availableDiscountCode
+  }), {
+    headers: { 'Content-Type': 'application/json' },
+    status: 200
+  })
+}
+
+async function setDiscountOrder(request: Request) {
+  await db.read()
+
+  const body = await request.json()
+  const { userId, discountOrder } = body
+
+  const user = db.data.users.find(u => u.userId === userId)
+  if (!user || user.role !== 'admin') {
+    return new Response(JSON.stringify({
+      message: 'Unauthorized. Only admins can change this setting.'
+    }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 403
+    })
+  }
+
+  if (typeof discountOrder !== 'number' || discountOrder < 1) {
+    return new Response(JSON.stringify({
+      message: 'Invalid discount order. Must be a positive number.'
+    }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 400
+    })
+  }
+
+  db.data.discountOrder = discountOrder
+  await db.write()
+
+  return new Response(JSON.stringify({
+    message: 'Discount order updated successfully',
+    discountOrder: discountOrder
+  }), {
+    headers: { 'Content-Type': 'application/json' },
+    status: 200
+  })
 }
 

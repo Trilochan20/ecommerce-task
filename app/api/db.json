@@ -3,35 +3,35 @@
     {
       "productId": "aoiehgoieho",
       "name": "New Product 2",
-      "quantity": 26,
+      "quantity": 993,
       "price": 42.21,
       "image": "https://picsum.photos/320/250?apple"
     },
     {
       "productId": "ejhgie",
       "name": "New Product 3",
-      "quantity": 39,
+      "quantity": 593,
       "price": 13.99,
       "image": "https://picsum.photos/320/250?banana"
     },
     {
       "productId": "oioih",
       "name": "New Product 4",
-      "quantity": 20,
+      "quantity": 665,
       "price": 16.99,
       "image": "https://picsum.photos/320/250?oranges"
     },
     {
       "productId": "pqrst",
       "name": "New Product 5",
-      "quantity": 35,
+      "quantity": 33,
       "price": 19.99,
       "image": "https://picsum.photos/320/250?grapes"
     },
     {
       "productId": "uvwxy",
       "name": "New Product 6",
-      "quantity": 28,
+      "quantity": 27,
       "price": 9.99,
       "image": "https://picsum.photos/320/250?mango"
     },
@@ -80,7 +80,7 @@
       "password": "123456",
       "orders": [
         {
-          "orderId": "5834e074-7fcf-45b8-811d-ea83b950ca47",
+          "orderId": "7258b85f-0818-4b00-9868-2daa489235e3",
           "items": [
             {
               "productId": "aoiehgoieho",
@@ -95,35 +95,135 @@
               "quantity": 2,
               "orderedPrice": 13.99,
               "price": 13.99
+            },
+            {
+              "productId": "oioih",
+              "name": "New Product 4",
+              "quantity": 1,
+              "orderedPrice": 16.99,
+              "price": 16.99
             }
           ],
-          "totalAmount": 112.4,
+          "totalAmount": 129.39000000000001,
           "discountApplied": 0,
-          "finalAmount": 112.4,
-          "date": "2024-08-30T09:18:25.710Z"
+          "finalAmount": 129.39000000000001,
+          "date": "2024-08-30T12:56:54.653Z",
+          "appliedDiscountCode": null
         },
         {
-          "orderId": "bf1c90be-fe00-4c2c-a393-491d0e1d59f7",
+          "orderId": "e9129b0f-eaab-40cc-8115-4b8847005b84",
           "items": [
             {
               "productId": "aoiehgoieho",
               "name": "New Product 2",
-              "quantity": 2,
+              "quantity": 1,
+              "orderedPrice": 42.21,
+              "price": 42.21
+            }
+          ],
+          "totalAmount": 42.21,
+          "discountApplied": 0,
+          "finalAmount": 42.21,
+          "date": "2024-08-30T12:57:02.817Z",
+          "appliedDiscountCode": null
+        },
+        {
+          "orderId": "c2a8620b-cc4d-43e6-9099-ea223b3d8fe4",
+          "items": [
+            {
+              "productId": "aoiehgoieho",
+              "name": "New Product 2",
+              "quantity": 1,
               "orderedPrice": 42.21,
               "price": 42.21
             },
             {
               "productId": "ejhgie",
               "name": "New Product 3",
-              "quantity": 2,
+              "quantity": 1,
               "orderedPrice": 13.99,
               "price": 13.99
             }
           ],
-          "totalAmount": 112.4,
+          "totalAmount": 56.2,
+          "discountApplied": 5.620000000000001,
+          "finalAmount": 50.58,
+          "date": "2024-08-30T12:57:09.161Z",
+          "appliedDiscountCode": "N5HID8RV"
+        }
+      ]
+    },
+    {
+      "name": "Abcd",
+      "email": "abcd@abcd.com",
+      "role": "user",
+      "userId": "e7ce8163-616f-4c99-8f46-fd89bb9d6d45",
+      "password": "abcdefg",
+      "orders": [
+        {
+          "orderId": "7243e188-ed13-4cb4-b0eb-c7467047f42f",
+          "items": [
+            {
+              "productId": "aoiehgoieho",
+              "name": "New Product 2",
+              "quantity": 1,
+              "orderedPrice": 42.21,
+              "price": 42.21
+            },
+            {
+              "productId": "ejhgie",
+              "name": "New Product 3",
+              "quantity": 1,
+              "orderedPrice": 13.99,
+              "price": 13.99
+            }
+          ],
+          "totalAmount": 56.2,
           "discountApplied": 0,
-          "finalAmount": 112.4,
-          "date": "2024-08-30T10:51:37.597Z"
+          "finalAmount": 56.2,
+          "date": "2024-08-30T12:58:05.967Z",
+          "appliedDiscountCode": null
+        },
+        {
+          "orderId": "57112144-57fa-4b04-8105-7ffe3e78a515",
+          "items": [
+            {
+              "productId": "aoiehgoieho",
+              "name": "New Product 2",
+              "quantity": 1,
+              "orderedPrice": 42.21,
+              "price": 42.21
+            },
+            {
+              "productId": "ejhgie",
+              "name": "New Product 3",
+              "quantity": 1,
+              "orderedPrice": 13.99,
+              "price": 13.99
+            }
+          ],
+          "totalAmount": 56.2,
+          "discountApplied": 0,
+          "finalAmount": 56.2,
+          "date": "2024-08-30T12:58:10.553Z",
+          "appliedDiscountCode": null
+        },
+        {
+          "orderId": "a9267def-83e9-4408-b823-45ab680595f7",
+          "items": [
+            {
+              "productId": "uvwxy",
+              "name": "New Product 6",
+              "quantity": 1,
+              "orderedPrice": 9.99,
+              "price": 9.99
+            }
+          ],
+          "totalAmount": 9.99,
+          "discountApplied": 0.9990000000000001,
+          "finalAmount": 8.991,
+          "date": "2024-08-30T12:58:17.814Z",
+          "appliedDiscountCode": "T_ACHXTD"
         }
       ]
     }
@@ -132,7 +232,17 @@
     {
       "code": "DISCOUNT10",
       "discount": 10,
-      "isAvailable": true
+      "isAvailable": false
+    },
+    {
+      "code": "N5HID8RV",
+      "discount": 10,
+      "isAvailable": false
+    },
+    {
+      "code": "T_ACHXTD",
+      "discount": 10,
+      "isAvailable": false
     }
   ],
   "discountOrder": 3

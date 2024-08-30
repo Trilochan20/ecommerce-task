@@ -4,6 +4,9 @@ import { useUser } from "@/components/Context/UserContext";
 import { useState, useEffect } from "react";
 import AllProductsTable from "@/components/Dashboard/AllProductsTable";
 import AllOrderList from "@/components/Dashboard/User/AllOrderList";
+import DiscountOrder from "@/components/Dashboard/discountOrder";
+import AllDiscountCodes from "@/components/Dashboard/AllDiscountCodes";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const DashboardPage = () => {
   const { user } = useUser();
@@ -37,9 +40,26 @@ const DashboardPage = () => {
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
-      <div className="text-xl">
-        {user.role === "admin" ? <AllProductsTable /> : <AllOrderList />}
-      </div>
+      {user.role === "admin" ? (
+        <Tabs defaultValue="products" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="products">Products</TabsTrigger>
+            <TabsTrigger value="discount-order">Discount Order</TabsTrigger>
+            <TabsTrigger value="discount-codes">Discount Codes</TabsTrigger>
+          </TabsList>
+          <TabsContent value="products">
+            <AllProductsTable />
+          </TabsContent>
+          <TabsContent value="discount-order">
+            <DiscountOrder />
+          </TabsContent>
+          <TabsContent value="discount-codes">
+            <AllDiscountCodes />
+          </TabsContent>
+        </Tabs>
+      ) : (
+        <AllOrderList />
+      )}
     </div>
   );
 };

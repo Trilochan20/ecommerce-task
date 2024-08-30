@@ -3,8 +3,8 @@ import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUser } from "@/components/Context/UserContext";
-import { z } from "zod";  this import
-import { useToast } from "@/components/ui/use-toast";  this import
+import { z } from "zod";
+import { useToast } from "@/components/ui/use-toast";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -25,7 +25,7 @@ const signupSchema = z
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const { login } = useUser();
-  const { toast } = useToast();  this line
+  const { toast } = useToast();
 
   const handleLogin = async (email: string, password: string) => {
     try {
