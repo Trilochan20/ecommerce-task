@@ -1,6 +1,6 @@
 [x] Project Setup
 [x] Dummy JSON for Products
-[ ] FrontEnd
+[x] FrontEnd
     [x] Handle Auth
         [x] Login Modal
         [x] Login form
@@ -10,12 +10,13 @@
     [x] Create Dummy Products Page
         [x] Create Product List
         [x] Create Single Product Page
-    [ ] Dashboard Page
-        [ ] Role Admin 
+    [x] Dashboard Page
+        [x] Role Admin 
             [x] Create Product
             [x] All Product List
             [x] All Discount List
-            [ ] All Order List per user
+            [x] All Order List per user
+            [x] All User List
         [x] Role User
             [x] Name - header 
             [x] Order History
@@ -26,7 +27,7 @@
         [x] Discount Apply
         [x] Checkout Flow
         
-[ ] Backend
+[x] Backend
     [x] install lowdb
     [x] Create CRUD apis
     [x] Create auth apis    
