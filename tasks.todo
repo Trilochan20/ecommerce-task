@@ -9,7 +9,7 @@
     [x] Create Header and Cart-Icon
     [x] Create Dummy Products Page
         [x] Create Product List
-        [x] Create Single Product Page
+        [ ] Create Single Product Modal
     [x] Dashboard Page
         [x] Role Admin 
             [x] Create Product
@@ -39,4 +39,5 @@
     [x] Create discount api
         [x] Generate discount code
         [x] List discount code
-[ ] Add Test Cases
+[x] Add Test Cases
+

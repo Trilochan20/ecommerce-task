@@ -1,5 +1,4 @@
 "use client";
-
 import ProductList from "@/components/Product/ProductList";
 
 export default function Home() {
