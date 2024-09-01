@@ -1,6 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import SingleProduct from "./SingleProduct";
 
 type Product = {
@@ -11,37 +9,34 @@ type Product = {
   image?: string;
 };
 
+const fetchProducts = async (): Promise<Product[]> => {
+  const response = await fetch("/api?action=getProducts");
+  if (!response.ok) {
+    throw new Error("Failed to fetch products");
+  }
+  const data = await response.json();
+  return data.products;
+};
+
 const ProductList: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    console.log("Fetching products...");
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("/api?action=getProducts");
-        // console.log("Fetch response:", response);
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-        const data = await response.json();
-        // console.log("Fetched products:", data);
-        setProducts(data.products);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  const {
+    data: products,
+    isLoading,
+    error,
+  } = useQuery<Product[], Error>({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+  });
 
   if (isLoading) {
     return <div className="text-center p-6">Loading products...</div>;
   }
 
-  if (products.length === 0) {
+  if (error) {
+    return <div className="text-center p-6">Error: {error.message}</div>;
+  }
+
+  if (!products || products.length === 0) {
     return <div className="text-center p-6">No products available.</div>;
   }
 

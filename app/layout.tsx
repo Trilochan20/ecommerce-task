@@ -5,6 +5,7 @@ import { NavigationHeader } from "@/components/Header";
 import { UserProvider } from "@/components/Context/UserContext";
 import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from "@/components/Context/CartContext";
+import ReactQueryProvider from "@/lib/QueryClientProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,13 +22,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <UserProvider>
-          <CartProvider>
-            <NavigationHeader />
-            {children}
-          </CartProvider>
-          <Toaster />
-        </UserProvider>
+        <ReactQueryProvider>
+          <UserProvider>
+            <CartProvider>
+              <NavigationHeader />
+              {children}
+            </CartProvider>
+            <Toaster />
+          </UserProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
