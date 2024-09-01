@@ -1,5 +1,6 @@
 import { expect, test, describe, beforeEach, mock } from "bun:test";
-import { GET, POST, PUT, DELETE, setDatabase } from "../app/api/route";
+import { GET, POST, PUT, DELETE } from "../app/api/route";
+import { setDatabase } from "../app/api/helpers";
 
 // Mock the database
 const mockDb = {
@@ -94,13 +95,13 @@ describe("API Routes", () => {
       expect(response.status).toBe(201);
       expect(data.message).toBe("Product created successfully");
       expect(data.product).toMatchObject(newProduct);
+      expect(data.product).toHaveProperty("productId");
     });
   });
 
   describe("PUT", () => {
     test("should update an existing product", async () => {
       const existingProduct = mockDb.data.products[0];
-      console.log("Existing product:", existingProduct);
       const updates = { name: "Updated Product", quantity: 15 };
       const request = new Request("http://localhost:3000/api", {
         method: "PUT",
@@ -111,9 +112,7 @@ describe("API Routes", () => {
       });
 
       const response = await PUT(request);
-      console.log("PUT response status:", response.status);
       const data = await response.json();
-      console.log("PUT response data:", data);
 
       expect(response.status).toBe(200);
       expect(data.message).toBe("Product updated successfully");
@@ -124,7 +123,6 @@ describe("API Routes", () => {
   describe("DELETE", () => {
     test("should delete an existing product", async () => {
       const existingProduct = mockDb.data.products[0];
-      console.log("Existing product for deletion:", existingProduct);
       const request = new Request(
         `http://localhost:3000/api?productId=${existingProduct.productId}`,
         {
@@ -133,17 +131,11 @@ describe("API Routes", () => {
       );
 
       const response = await DELETE(request);
-      console.log("DELETE response status:", response.status);
       const data = await response.json();
-      console.log("DELETE response data:", data);
 
       expect(response.status).toBe(200);
       expect(data.message).toBe("Product deleted successfully");
-      expect(data.product).toMatchObject({
-        productId: existingProduct.productId,
-        image: existingProduct.image,
-        price: existingProduct.price,
-      });
+      expect(data.productId).toBe(existingProduct.productId);
     });
   });
 });

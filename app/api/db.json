@@ -3,21 +3,21 @@
     {
       "productId": "ejhgie",
       "name": "New Product 3",
-      "quantity": 589,
-      "price": 13.99,
+      "quantity": 584,
+      "price": 13.95,
       "image": "https://picsum.photos/320/250?banana"
     },
     {
       "productId": "oioih",
       "name": "New Product 4",
-      "quantity": 661,
+      "quantity": 657,
       "price": 16.99,
       "image": "https://picsum.photos/320/250?oranges"
     },
     {
       "productId": "pqrst",
       "name": "New Product 5",
-      "quantity": 31,
+      "quantity": 30,
       "price": 19.99,
       "image": "https://picsum.photos/320/250?grapes"
     },
@@ -143,6 +143,78 @@
           "finalAmount": 50.58,
           "date": "2024-08-30T12:57:09.161Z",
           "appliedDiscountCode": "N5HID8RV"
+        },
+        {
+          "orderId": "a487e926-7ae5-4df7-928d-a46d92f96727",
+          "items": [
+            {
+              "productId": "ejhgie",
+              "name": "New Product 3",
+              "quantity": 2,
+              "orderedPrice": 13.99,
+              "price": 13.99
+            },
+            {
+              "productId": "oioih",
+              "name": "New Product 4",
+              "quantity": 2,
+              "orderedPrice": 16.99,
+              "price": 16.99
+            }
+          ],
+          "totalAmount": 61.959999999999994,
+          "discountApplied": 0,
+          "finalAmount": 61.959999999999994,
+          "date": "2024-09-01T18:46:01.200Z",
+          "appliedDiscountCode": null
+        },
+        {
+          "orderId": "ae722110-f112-40a8-9246-9ef932009d36",
+          "items": [
+            {
+              "productId": "ejhgie",
+              "name": "New Product 3",
+              "quantity": 2,
+              "orderedPrice": 13.99,
+              "price": 13.99
+            },
+            {
+              "productId": "oioih",
+              "name": "New Product 4",
+              "quantity": 2,
+              "orderedPrice": 16.99,
+              "price": 16.99
+            },
+            {
+              "productId": "pqrst",
+              "name": "New Product 5",
+              "quantity": 1,
+              "orderedPrice": 19.99,
+              "price": 19.99
+            }
+          ],
+          "totalAmount": 81.94999999999999,
+          "discountApplied": 0,
+          "finalAmount": 81.94999999999999,
+          "date": "2024-09-01T18:46:06.875Z",
+          "appliedDiscountCode": null
+        },
+        {
+          "orderId": "07eb6863-4cec-4495-8b91-543f75008dd9",
+          "items": [
+            {
+              "productId": "ejhgie",
+              "name": "New Product 3",
+              "quantity": 1,
+              "orderedPrice": 13.99,
+              "price": 13.99
+            }
+          ],
+          "totalAmount": 13.99,
+          "discountApplied": 1.399,
+          "finalAmount": 12.591000000000001,
+          "date": "2024-09-01T18:46:12.597Z",
+          "appliedDiscountCode": "SPOCNHW_"
         }
       ]
     },
@@ -320,6 +392,11 @@
     },
     {
       "code": "S-WZES43",
+      "discount": 10,
+      "isAvailable": false
+    },
+    {
+      "code": "SPOCNHW_",
       "discount": 10,
       "isAvailable": false
     }
