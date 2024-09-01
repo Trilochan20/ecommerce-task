@@ -16,13 +16,16 @@ const ProductList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    console.log("Fetching products...");
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/api");
+        const response = await fetch("/api?action=getProducts");
+        console.log("Fetch response:", response);
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
         const data = await response.json();
+        console.log("Fetched products:", data);
         setProducts(data.products);
       } catch (error) {
         console.error("Error fetching products:", error);
