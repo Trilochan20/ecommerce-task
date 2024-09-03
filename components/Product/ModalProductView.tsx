@@ -1,11 +1,9 @@
-"use client";
 import { MdShoppingCart } from "react-icons/md";
 import { useState } from "react";
 import Image from "next/image";
 import { useCart } from "../Context/CartContext";
 import { useUser } from "../Context/UserContext";
 import { toast } from "@/components/ui/use-toast";
-import ProductModal from "./ProductModal";
 
 type Product = {
   productId: string;
@@ -15,11 +13,11 @@ type Product = {
   image?: string;
 };
 
-interface SingleProductProps {
+interface ModalProductViewProps {
   product: Product;
 }
 
-const SingleProduct: React.FC<SingleProductProps> = ({ product }) => {
+const ModalProductView: React.FC<ModalProductViewProps> = ({ product }) => {
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const { addToCart, getCartItemQuantity } = useCart();
   const { user } = useUser();
@@ -69,54 +67,47 @@ const SingleProduct: React.FC<SingleProductProps> = ({ product }) => {
   };
 
   return (
-    <div className="w-full max-w-sm rounded bg-white shadow-xl p-5 text-gray-800 relative">
-      <div className="relative h-48 mb-4">
+    <div className="flex">
+      <div className="w-1/2 pr-4">
         <Image
           src={product.image || "https://via.placeholder.com/300"}
-          className="w-full h-full object-cover"
+          className="w-full h-auto object-cover rounded"
           alt={product.name}
           width={300}
           height={300}
         />
-        <ProductModal product={product} />
       </div>
-      <div>
-        <h1 className="font-bold uppercase text-xl mb-2">{product.name}</h1>
-
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <span className="text-2xl leading-none align-baseline">₹</span>
-            <span className="font-bold text-3xl leading-none align-baseline">
-              {product.price.toFixed(2)}
+      <div className="w-1/2 pl-4">
+        <h1 className="font-bold text-2xl mb-4">{product.name}</h1>
+        <div className="mb-4">
+          <span className="text-2xl leading-none align-baseline">₹</span>
+          <span className="font-bold text-3xl leading-none align-baseline">
+            {product.price.toFixed(2)}
+          </span>
+        </div>
+        <div className="mb-4">
+          {isOutOfStock ? (
+            <span className="text-red-600 font-semibold">Out of Stock</span>
+          ) : !canAddToCart ? (
+            <span className="text-red-600 font-semibold">
+              Maximum quantity reached
             </span>
-          </div>
-          <div className="flex items-center">
-            {isOutOfStock ? (
-              <span className="text-red-600 font-semibold">Out of Stock</span>
-            ) : !canAddToCart ? (
-              <span className="text-red-600 font-semibold">
-                Maximum quantity reached
-              </span>
-            ) : (
-              <>
-                <label
-                  htmlFor={`quantity-${product.productId}`}
-                  className="mr-2"
-                >
-                  Quantity:
-                </label>
-                <input
-                  type="number"
-                  id={`quantity-${product.productId}`}
-                  min="1"
-                  max={remainingQuantity}
-                  value={selectedQuantity}
-                  onChange={handleQuantityChange}
-                  className="w-16 px-2 py-1 border rounded"
-                />
-              </>
-            )}
-          </div>
+          ) : (
+            <div className="flex items-center">
+              <label htmlFor={`quantity-${product.productId}`} className="mr-2">
+                Quantity:
+              </label>
+              <input
+                type="number"
+                id={`quantity-${product.productId}`}
+                min="1"
+                max={remainingQuantity}
+                value={selectedQuantity}
+                onChange={handleQuantityChange}
+                className="w-16 px-2 py-1 border rounded"
+              />
+            </div>
+          )}
         </div>
         <button
           onClick={handleAddToCart}
@@ -141,4 +132,4 @@ const SingleProduct: React.FC<SingleProductProps> = ({ product }) => {
   );
 };
 
-export default SingleProduct;
+export default ModalProductView;
