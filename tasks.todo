@@ -9,7 +9,8 @@
     [x] Create Header and Cart-Icon
     [x] Create Dummy Products Page
         [x] Create Product List
-        [ ] Create Single Product Modal
+        [x] Create Single Product Modal
+        [ ] Create option for Product short and long description
     [x] Dashboard Page
         [x] Role Admin 
             [x] Create Product
